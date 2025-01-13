@@ -1,5 +1,5 @@
 // Assuming socket.io.min.js is loaded via CDN, you don't need to import it anymore
-const socket = io('http://localhost:3000');
+const socket = io('https://livechat-xchl.onrender.com');
 
 const form = document.getElementById('formform');
 const messageInput = document.getElementById('message-input');
