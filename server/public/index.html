@@ -3,87 +3,174 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Simple Chatroom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Cloud Room</title>
     <style>
+      /* Global Styles */
       body {
-        font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #3f3fb4;
+        background-color: #121212;
+        color: #ffffff;
       }
+
+      .bebas-font {
+        font-family: "Comfortaa", serif;
+        font-optical-sizing: auto;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      /* Chatroom Container */
       .chatroom {
-        width: 80%;
-        max-width: 1200px;
-        height: 80%;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        overflow: hidden;
+        width: 90%;
+        max-width: 800px;
+        height: 90%;
         display: flex;
         flex-direction: column;
-        background-color: #684e4e;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #1e1e1e;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
       }
+
+      /* Header Section */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        background-color: #000000;
+        border-bottom: 1px solid #333;
+        text-align: center;
+      }
+
+      .header img {
+        height: 220px;
+        width: 220px;
+        margin-right: 10px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #ffffff;
+        letter-spacing: 1px;
+      }
+
+      /* Messages Section */
       .messages {
         flex: 1;
-        padding: 20px;
+        padding: 15px;
         overflow-y: auto;
-        background-color: #969595;
+        background-color: #232323;
+        border-bottom: 1px solid #333;
+        scrollbar-width: thin;
+        scrollbar-color: #444 #232323;
       }
+
+      .messages::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .messages::-webkit-scrollbar-thumb {
+        background-color: #444;
+        border-radius: 5px;
+      }
+
+      .messages::-webkit-scrollbar-track {
+        background-color: #232323;
+      }
+
       .messages .message {
-        margin-bottom: 15px;
-        padding: 12px;
-        border-radius: 6px;
-        background-color: #e0e0e0;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        background-color: #2a2a2a;
         word-wrap: break-word;
+        color: #f1f1f1;
+        font-size: 14px;
       }
+
+      .messages .message.user {
+        background-color: #0066cc;
+        color: #ffffff;
+        align-self: flex-end;
+      }
+
+      /* Input Area */
       .input-area {
         display: flex;
-        border-top: 1px solid #ccc;
-        background-color: #f9f9f9;
+        padding: 10px;
+        background-color: #1e1e1e;
+        border-top: 1px solid #333;
       }
+
       .input-area input {
         flex: 1;
-        padding: 15px;
+        padding: 12px;
         border: none;
+        border-radius: 5px;
         outline: none;
-        font-size: 18px;
+        background-color: #2a2a2a;
+        color: #f1f1f1;
+        font-size: 16px;
       }
+
+      .input-area input::placeholder {
+        color: #777;
+      }
+
       .input-area button {
-        padding: 15px 30px;
+        margin-left: 10px;
+        padding: 12px 20px;
         border: none;
-        background-color: #2d74c0;
+        border-radius: 5px;
+        background-color: #0066cc;
         color: white;
-        font-size: 18px;
+        font-size: 16px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
       }
+
       .input-area button:hover {
-        background-color: #0056b3;
+        background-color: #004a99;
       }
     </style>
   </head>
-  <body>
+  <body class="bebas-font">
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="./script.js" type="module"></script>
     <div class="chatroom">
+      <!-- Header Section -->
+      <div class="header">
+        <img src="./assets/OSG.gif" alt="Logo" />
+      </div>
+
+      <!-- Messages Section -->
       <div class="messages" id="messagesii">
         <!-- Messages will appear here -->
       </div>
 
-      <form id="formform">
-        <label for="message-input">Message</label>
-        <div class="input-area">
-        <input type="text" id="message-input">
-        <button type="submit" id="send-button">Send</button></div><br>
-        <label for="room-input">Room</label>
-        <div class="input-area">
-        <input type="text" id="room-input">
-        <button type="button" id="room-button">Join</button>
-        </div>
+      <!-- Input Section -->
+      <form id="formform" class="input-area">
+        <input
+        class="bebas-font"
+          type="text"
+          id="message-input"
+          placeholder="Type your message..."
+          autocomplete="off"
+        />
+        <button type="submit" id="send-button">Send</button>
       </form>
     </div>
   </body>

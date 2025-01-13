@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
   socket.on('message', (msg) => {
     console.log(`Message received: ${msg}`);
     // Send a reply back to the client
-    socket.emit('reply', 'Message received loud and clear!');
+    socket.broadcast.emit('recieve-message', msg);
   });
 
   socket.on('disconnect', () => {
