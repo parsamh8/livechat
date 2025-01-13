@@ -1,0 +1,69 @@
+/* Basic styles for the page with dark theme */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background */
+    color: #f5f5f5; /* Light text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #f5a623; /* Orange color for button */
+    color: #1e1e1e; /* Dark text */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #d68b1a; /* Darker orange on hover */
+  }
+  
+  /* The overlay, initially hidden */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Hidden initially */
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for showing/hiding */
+  }
+  
+  /* Modal content style */
+  .modal {
+    background-color: #333;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #f5f5f5;
+  }
+  
+  p {
+    color: #ccc;
+  }
+  
+  button#closeModalBtn {
+    background-color: #d68b1a;
+    margin-top: 20px;
+  }
+  
+  button#closeModalBtn:hover {
+    background-color: #c47717; /* Darker orange on hover */
+  }
+  
