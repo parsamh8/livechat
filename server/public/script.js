@@ -1,77 +1,61 @@
 const socket = io('https://livechat-xchl.onrender.com');
-
 const form = document.getElementById('formform');
 const messageInput = document.getElementById('message-input');
 const messagesDiv = document.getElementById('messagesii');
 let typingTimeout;
 
-// Prompt the user for their name
 const username = prompt('Enter your name:') || 'Anonymous';
-
-// Notify the server of the user's name
 socket.emit('set-name', username);
 
+// Handle form submission
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   const message = messageInput.value.trim();
 
   if (message) {
-    // Include the user's name with the message
     socket.emit('message', { name: username, message });
-    displayMessage(`You: ${message}`); // Display the message locally
-    messageInput.value = ""; // Clear the input
-    socket.emit('stop-typing'); // Notify the server that typing has stopped
+    displayMessage(`You: ${message}`);
+    messageInput.value = '';
+    socket.emit('stop-typing'); // Notify the server typing has stopped
   }
 });
 
-// Notify server when user starts typing
+// Notify server when the user starts typing
 messageInput.addEventListener('input', () => {
   socket.emit('typing', username);
 
-  // Clear the typing timeout
+  // Clear existing typing timeout
   clearTimeout(typingTimeout);
 
-  // Emit 'stop-typing' after 2 seconds of inactivity
+  // Stop typing after 2 seconds of inactivity
   typingTimeout = setTimeout(() => {
     socket.emit('stop-typing');
-  }, 2000);
+  }, 3000);
 });
 
-// Function to display messages
+// Display a message
 function displayMessage(content) {
   const div = document.createElement('div');
   div.textContent = content;
-  div.style = "margin-top: 10px";
-  messagesDiv.append(div);
+  div.style.marginTop = '10px';
+  messagesDiv.appendChild(div);
 }
 
-// Function to display typing indicator
-function showTypingIndicator(name) {
-  let typingDiv = document.getElementById('typing-indicator');
-  if (!typingDiv) {
-    typingDiv = document.createElement('div');
-    typingDiv.id = 'typing-indicator';
-    typingDiv.style = "font-style: italic; margin-top: 10px; color: gray;";
-    messagesDiv.append(typingDiv);
-  }
-  typingDiv.textContent = `${name} is typing...`;
-}
+// Handle user connection and disconnection
+socket.on('user-connected', (name) => {
+  displayMessage(`${name} has joined the chat.`);
+});
 
-// Function to hide typing indicator
-function hideTypingIndicator() {
-  const typingDiv = document.getElementById('typing-indicator');
-  if (typingDiv) {
-    typingDiv.remove();
-  }
-}
+socket.on('user-disconnected', (name) => {
+  displayMessage(`${name} has left the chat.`);
+});
 
-// Listen for messages from other users
-socket.on('recieve-message', (data) => {
-  const { name, message } = data;
+// Handle incoming messages
+socket.on('recieve-message', ({ name, message }) => {
   displayMessage(`${name}: ${message}`);
 });
 
-// Listen for typing and stop-typing events
+// Handle typing indicator
 socket.on('user-typing', (name) => {
   showTypingIndicator(name);
 });
@@ -79,3 +63,22 @@ socket.on('user-typing', (name) => {
 socket.on('user-stop-typing', () => {
   hideTypingIndicator();
 });
+
+// Typing indicator logic
+function showTypingIndicator(name) {
+  let typingDiv = document.getElementById('typing-indicator');
+  if (!typingDiv) {
+    typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.style = 'font-style: italic; margin-top: 10px; color: gray;';
+    messagesDiv.appendChild(typingDiv);
+  }
+  typingDiv.textContent = `${name} is typing...`;
+}
+
+function hideTypingIndicator() {
+  const typingDiv = document.getElementById('typing-indicator');
+  if (typingDiv) {
+    typingDiv.remove();
+  }
+}
