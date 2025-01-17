@@ -7,20 +7,43 @@ const PORT = 3000;
 const server = createServer(app);
 const io = new Server(server);
 
-// Serve static files (your client-side files)
 app.use(express.static('public'));
+
+// Store usernames
+const users = {};
 
 io.on('connection', (socket) => {
   console.log(`A user connected: ${socket.id}`);
 
-  socket.on('message', (msg) => {
-    console.log(`Message received: ${msg}`);
-    // Send a reply back to the client
-    socket.broadcast.emit('recieve-message', msg);
+  // Save the user's name
+  socket.on('set-name', (name) => {
+    users[socket.id] = name;
+    console.log(`User ${socket.id} set their name as ${name}`);
   });
 
+  // Broadcast typing status
+  socket.on('typing', (name) => {
+    socket.broadcast.emit('user-typing', name);
+  });
+
+  // Broadcast stop typing status
+  socket.on('stop-typing', () => {
+    socket.broadcast.emit('user-stop-typing');
+  });
+
+  // Handle messages
+  socket.on('message', (data) => {
+    const { name, message } = data;
+    console.log(`Message from ${name}: ${message}`);
+
+    // Broadcast message to all other users
+    socket.broadcast.emit('recieve-message', { name, message });
+  });
+
+  // Handle disconnection
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);
+    delete users[socket.id];
   });
 });
 
