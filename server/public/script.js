@@ -1,4 +1,3 @@
-// Assuming socket.io.min.js is loaded via CDN, you don't need to import it anymore
 const socket = io('https://livechat-xchl.onrender.com');
 
 const form = document.getElementById('formform');
@@ -14,13 +13,15 @@ socket.emit('set-name', username);
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  const message = messageInput.value;
+  const message = messageInput.value.trim();
 
-  // Include the user's name with the message
-  socket.emit('message', { name: username, message });
-  displayMessage(`${username}: ${message}`); // Display the message locally
-  messageInput.value = ""; // Clear the input
-  socket.emit('stop-typing'); // Stop typing indicator
+  if (message) {
+    // Include the user's name with the message
+    socket.emit('message', { name: username, message });
+    displayMessage(`You: ${message}`); // Display the message locally
+    messageInput.value = ""; // Clear the input
+    socket.emit('stop-typing'); // Notify the server that typing has stopped
+  }
 });
 
 // Notify server when user starts typing
@@ -64,7 +65,13 @@ function hideTypingIndicator() {
   }
 }
 
-// Listen for typing and stop-typing events from the server
+// Listen for messages from other users
+socket.on('recieve-message', (data) => {
+  const { name, message } = data;
+  displayMessage(`${name}: ${message}`);
+});
+
+// Listen for typing and stop-typing events
 socket.on('user-typing', (name) => {
   showTypingIndicator(name);
 });

@@ -34,10 +34,13 @@ io.on('connection', (socket) => {
   // Handle messages
   socket.on('message', (data) => {
     const { name, message } = data;
-    console.log(`Message from ${name}: ${message}`);
 
-    // Broadcast message to all other users
-    socket.broadcast.emit('recieve-message', { name, message });
+    if (name && message) {
+      console.log(`Message from ${name}: ${message}`);
+
+      // Broadcast message to all other users
+      socket.broadcast.emit('recieve-message', { name, message });
+    }
   });
 
   // Handle disconnection
